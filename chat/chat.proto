@@ -1,0 +1,86 @@
+syntax = "proto2";
+
+package chat;
+
+message UserRegistration {
+  optional string usarname = 1;
+  optional string ip = 2;
+}
+message ChangeStatus{
+        optional string username = 1;
+    optional string status = 2;
+}
+// Mandar un mensaje
+// all = todos los usuarios
+// (username) = usuario específico
+message Message {
+    optional string receiver = 1;
+    optional string sender = 2;
+    optional string text = 3;
+}
+
+// Obtener informacion de usuario
+message UserInformation {
+    optional string username = 1;
+    optional string ip = 2;
+    optional string status = 3;
+}
+// Solicitud de información de usuario/s
+// user (all) = todos los usuarios
+// user (username) = usuario en específico
+message UserRequest {
+    optional string user = 1;
+}
+
+// Mostrar usuarios conectados
+message ConnectedUsers {
+    repeated UserInformation users = 1;
+}
+// Solicitud de cliente
+// option (0) = Registro de usuario
+// option (1) = Listado de usuarios conectados
+// option (2) = Información de usuario
+// option (3) = Cambio de estado
+// option (4) = mensaje
+message ClientRequest {
+    enum Option{
+        USER_LOGIN = 0;
+        CONNECTED_USERS = 1;
+        USER_INFORMATION = 2;
+        STATUS_CHANGE = 3;
+        SEND_MESSAGE = 4;
+    }   
+    optional Option option = 1;
+    optional UserRegistration newuser = 2;
+    optional UserRequest user = 3;
+    optional ChangeStatus status = 4;
+    optional Message messg = 5;
+}
+
+// Respuesta del servidor
+// option (0) = Registro de usuario
+// option (1) = Listado de usuarios conectados
+// option (2) = Información de usuario
+// option (3) = Cambio de estado
+// option (4) = mensaje
+message ServerResponse {
+    enum Option{
+        USER_LOGIN = 0;
+        CONNECTED_USERS = 1;
+        USER_INFORMATION = 2;
+        STATUS_CHANGE = 3;
+        SEND_MESSAGE = 4;
+    }
+    optional Option option = 1;
+    enum Code{         
+        FAILED_OPERATION = 0;
+        SUCCESSFUL_OPERATION = 1;
+    }
+    optional Code code = 2;
+    optional string response = 3;
+    optional ConnectedUsers users = 4;
+    optional UserInformation user = 5;
+    optional Message messg = 6;
+    optional ChangeStatus status = 7;
+}
+
